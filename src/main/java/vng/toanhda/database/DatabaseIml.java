@@ -50,16 +50,16 @@ public class DatabaseIml implements Database {
 
     private void publishEvent(Future future) {
         Tracker tracker = Tracker.builder().systemName("PingServiceCallDatabase").method("pingWithDisruptor").build();
-        clientProvider.getConnection().setHandler(conn -> {
+        clientProviderVertX.getClientVertX().getConnection(ar -> {
+            SQLConnection connection = ar.result();
             RingBuffer<StorageEvent> ringBuffer = DisruptorCreator.getRingBuffer();
             long sequenceId = ringBuffer.next();
             StorageEvent storageEvent = ringBuffer.get(sequenceId);
-            storageEvent.setConnection(conn.result());
+            storageEvent.setConnection(connection);
             storageEvent.setFuture(future);
             storageEvent.setTracker(tracker);
             ringBuffer.publish(sequenceId);
         });
-
 
     }
 }

@@ -15,13 +15,12 @@ public class SQLClientProviderProviderIml extends ClientProvider implements SQLC
 
 
     @Override
-    public Future<Connection> getConnection() {
-        Future<Connection> future = Future.future();
+    public Connection getConnection() {
         try {
-            future.complete(dataSource.getConnection());
+           return dataSource.getConnection();
         } catch (SQLException e) {
-            future.fail(e);
+            e.printStackTrace();
         }
-        return future;
+        return null;
     }
 }

@@ -1,9 +1,8 @@
 package vng.toanhda.disruptor;
 
 import com.lmax.disruptor.EventHandler;
+import io.vertx.ext.sql.SQLConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,16 +11,18 @@ public class StorageConsumer implements EventHandler<StorageEvent> {
 
     @Override
     public void onEvent(StorageEvent storageEvent, long sequence, boolean endOfBatch) throws Exception {
-        Connection conn = storageEvent.getConnection();
-        PreparedStatement pst = conn.prepareStatement(SELECT_TEST);
-        java.sql.ResultSet rs = pst.executeQuery();
-        storageEvent.getTracker().record();
-
-        List<String> uids = new ArrayList<>();
-        while (rs.next()) {
-            uids.add(rs.getString("uid"));
+        SQLConnection connection = storageEvent.getConnection();
+        if (connection != null) {
+            connection.query(SELECT_TEST, select -> {
+                storageEvent.getTracker().record();
+                if (select.failed()) {
+                    return;
+                }
+                List<String> uids = new ArrayList<>();
+                uids.add(select.result().getRows().get(0).getString("uid"));
+                storageEvent.getFuture().complete(uids);
+                connection.close();
+            });
         }
-        storageEvent.getFuture().complete(uids);
-        conn.close();
     }
 }

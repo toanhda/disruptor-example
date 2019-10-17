@@ -2,12 +2,13 @@ package vng.toanhda.disruptor;
 
 import com.lmax.disruptor.EventFactory;
 import io.vertx.core.Future;
+import io.vertx.ext.sql.SQLConnection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import vng.toanhda.database.SQLClientProvider;
 import vng.toanhda.metrics.Tracker;
 
-import java.sql.Connection;
 
 @Setter
 @Getter
@@ -18,8 +19,8 @@ public class StorageEvent {
             return new StorageEvent();
         }
     };
-    Connection connection;
     Future<Object> future;
     Tracker tracker;
+    SQLConnection connection;
 }
 
