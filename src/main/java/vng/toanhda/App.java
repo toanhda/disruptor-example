@@ -26,7 +26,7 @@ public class App {
 
         // Start disruptor
         DisruptorCreator.getInstance(
-                DisruptorCreator.DISRUPTOR_NAME_GET, StorageEvent.EVENT_FACTORY, 1024, new StorageConsumer());
+                DisruptorCreator.DISRUPTOR_NAME_GET, StorageEvent.EVENT_FACTORY, serverConfig.getDisruptorConfig().getBufferSize(), new StorageConsumer());
 
         // Initialize service
         Vertx vertx = VertxCommon.getVertxInstance(serverConfig.getVertxConfig());

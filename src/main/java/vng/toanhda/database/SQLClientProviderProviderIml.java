@@ -1,23 +1,27 @@
 package vng.toanhda.database;
 
+import io.vertx.core.Future;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class SQLClientProviderProviderIml extends ClientProvider implements SQLClientProvider {
     DataSource dataSource;
+
     public SQLClientProviderProviderIml() {
         this.dataSource = getDataSource();
     }
 
 
     @Override
-    public Connection getConnection(){
+    public Future<Connection> getConnection() {
+        Future<Connection> future = Future.future();
         try {
-            return dataSource.getConnection();
+            future.complete(dataSource.getConnection());
         } catch (SQLException e) {
-            e.printStackTrace();
+            future.fail(e);
         }
-        return null;
+        return future;
     }
 }

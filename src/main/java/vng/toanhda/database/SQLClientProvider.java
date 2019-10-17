@@ -7,5 +7,5 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public interface SQLClientProvider {
-    Connection getConnection();
+    Future<Connection> getConnection();
 }

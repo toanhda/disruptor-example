@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import vng.toanhda.disruptor.DisruptorConfig;
 import vng.toanhda.grpc.GrpcConfig;
 import vng.toanhda.utils.JsonProtoUtils;
 import vng.toanhda.vertx.VertxConfig;
@@ -16,16 +17,22 @@ public class ServerConfig {
 
   private VertxConfig vertxConfig;
   private GrpcConfig grpcConfig;
+  private DisruptorConfig disruptorConfig;
 
   public void verify() {
     assert vertxConfig != null;
     assert grpcConfig != null;
+    assert disruptorConfig != null;
+
 
 
     logger.info("> vertxConfig={}", JsonProtoUtils.printGson(vertxConfig));
     logger.info("> grpcConfig={}", JsonProtoUtils.printGson(grpcConfig));
+    logger.info("> disruptorConfig={}", JsonProtoUtils.printGson(disruptorConfig));
 
     System.out.println("> vertxConfig={}"+ JsonProtoUtils.printGson(vertxConfig));
     System.out.println("> grpcConfig={}"+ JsonProtoUtils.printGson(grpcConfig));
+    System.out.println("> disruptorConfig={}"+ JsonProtoUtils.printGson(disruptorConfig));
+
   }
 }

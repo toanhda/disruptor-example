@@ -5,3 +5,6 @@ vertxConfig:
 grpcConfig:
   port: 8082
   numInstances: 8
+
+disruptorConfig:
+  bufferSize: 1024

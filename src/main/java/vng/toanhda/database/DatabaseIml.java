@@ -4,8 +4,8 @@ import com.lmax.disruptor.RingBuffer;
 import io.vertx.core.Future;
 import io.vertx.ext.sql.ResultSet;
 import io.vertx.ext.sql.SQLConnection;
-import vng.toanhda.disruptor.StorageEvent;
 import vng.toanhda.disruptor.DisruptorCreator;
+import vng.toanhda.disruptor.StorageEvent;
 import vng.toanhda.metrics.Tracker;
 
 import java.util.List;
@@ -43,19 +43,23 @@ public class DatabaseIml implements Database {
     @Override
     public Future<List<String>> selectPingWithDisruptor() {
         Future future = Future.future();
-        publishEnvent(future);
+        publishEvent(future);
         return future;
 
     }
 
-    private void publishEnvent(Future future){
+    private void publishEvent(Future future) {
         Tracker tracker = Tracker.builder().systemName("PingServiceCallDatabase").method("pingWithDisruptor").build();
-        RingBuffer<StorageEvent> ringBuffer = DisruptorCreator.getRingBuffer();
-        long sequenceId = ringBuffer.next();
-        StorageEvent storageEvent = ringBuffer.get(sequenceId);
-        storageEvent.setConnection(clientProvider.getConnection());
-        storageEvent.setFuture(future);
-        storageEvent.setTracker(tracker);
-        ringBuffer.publish(sequenceId);
+        clientProvider.getConnection().setHandler(conn -> {
+            RingBuffer<StorageEvent> ringBuffer = DisruptorCreator.getRingBuffer();
+            long sequenceId = ringBuffer.next();
+            StorageEvent storageEvent = ringBuffer.get(sequenceId);
+            storageEvent.setConnection(conn.result());
+            storageEvent.setFuture(future);
+            storageEvent.setTracker(tracker);
+            ringBuffer.publish(sequenceId);
+        });
+
+
     }
 }
