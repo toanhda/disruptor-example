@@ -1,9 +1,6 @@
 package vng.toanhda.disruptor;
 
-import com.lmax.disruptor.BlockingWaitStrategy;
-import com.lmax.disruptor.EventFactory;
-import com.lmax.disruptor.EventHandler;
-import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.*;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
@@ -28,8 +25,8 @@ public class DisruptorCreator {
         Disruptor disruptor = new Disruptor(factory,
                 bufferSize,
                 DaemonThreadFactory.INSTANCE,
-                ProducerType.MULTI,
-                new BlockingWaitStrategy());
+                ProducerType.SINGLE,
+                new YieldingWaitStrategy());
 
         disruptor.handleEventsWith(handlers);
         ringBuffer = disruptor.start();
