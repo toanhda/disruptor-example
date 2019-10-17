@@ -14,13 +14,13 @@ public class GrpcServer {
         this.pingService = pingService;
     }
 
-    public void start() {
+    public void start(GrpcConfig grpcConfig) {
         vertx.deployVerticle(
                 () -> new AbstractVerticle() {
                     @Override
                     public void start() throws Exception {
                         VertxServerBuilder
-                                .forAddress(vertx, "0.0.0.0", 8082)
+                                .forAddress(vertx, "0.0.0.0", grpcConfig.getPort())
                                 .addService(pingService)
                                 .build()
                                 .start();
@@ -29,7 +29,7 @@ public class GrpcServer {
                     }
                 },
                 new DeploymentOptions()
-                        .setInstances(4));
+                        .setInstances(grpcConfig.getNumInstances()));
     }
 
 }

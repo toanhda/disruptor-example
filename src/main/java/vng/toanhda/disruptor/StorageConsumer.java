@@ -15,6 +15,7 @@ public class StorageConsumer implements EventHandler<StorageEvent> {
         Connection conn = storageEvent.getConnection();
         PreparedStatement pst = conn.prepareStatement(SELECT_TEST);
         java.sql.ResultSet rs = pst.executeQuery();
+        storageEvent.getTracker().record();
 
         List<String> uids = new ArrayList<>();
         while (rs.next()) {

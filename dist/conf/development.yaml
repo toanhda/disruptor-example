@@ -1,0 +1,7 @@
+vertxConfig:
+  prometheusPort: 8099
+  workerPoolSize: 8
+
+grpcConfig:
+  port: 8082
+  numInstances: 8

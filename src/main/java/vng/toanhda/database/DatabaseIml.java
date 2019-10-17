@@ -8,7 +8,6 @@ import vng.toanhda.disruptor.StorageEvent;
 import vng.toanhda.disruptor.DisruptorCreator;
 import vng.toanhda.metrics.Tracker;
 
-import java.sql.SQLException;
 import java.util.List;
 
 
@@ -29,6 +28,7 @@ public class DatabaseIml implements Database {
         clientProviderVertX.getClientVertX().getConnection(ar -> {
             SQLConnection connection = ar.result();
             connection.query(SELECT_TEST, select -> {
+                tracker.build().record();
                 if (select.failed()) {
                     response.fail(select.cause());
                     return;
@@ -37,26 +37,25 @@ public class DatabaseIml implements Database {
                 connection.close();
             });
         });
-        tracker.build().record();
         return response;
     }
 
     @Override
     public Future<List<String>> selectPingWithDisruptor() {
-        Tracker.TrackerBuilder tracker = Tracker.builder().systemName("PingServiceCallDatabase").method("pingWithDisruptor");
         Future future = Future.future();
-        consumerRequest(future);
-        tracker.build().record();
+        publishEnvent(future);
         return future;
 
     }
 
-    private void consumerRequest(Future future){
+    private void publishEnvent(Future future){
+        Tracker tracker = Tracker.builder().systemName("PingServiceCallDatabase").method("pingWithDisruptor").build();
         RingBuffer<StorageEvent> ringBuffer = DisruptorCreator.getRingBuffer();
         long sequenceId = ringBuffer.next();
         StorageEvent storageEvent = ringBuffer.get(sequenceId);
         storageEvent.setConnection(clientProvider.getConnection());
         storageEvent.setFuture(future);
+        storageEvent.setTracker(tracker);
         ringBuffer.publish(sequenceId);
     }
 }
