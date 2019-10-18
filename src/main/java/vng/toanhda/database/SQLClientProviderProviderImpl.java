@@ -6,10 +6,10 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class SQLClientProviderProviderIml extends ClientProvider implements SQLClientProvider {
+public class SQLClientProviderProviderImpl extends ClientProvider implements SQLClientProvider {
     DataSource dataSource;
 
-    public SQLClientProviderProviderIml() {
+    public SQLClientProviderProviderImpl() {
         this.dataSource = getDataSource();
     }
 

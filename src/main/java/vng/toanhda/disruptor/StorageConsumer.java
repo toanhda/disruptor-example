@@ -18,9 +18,7 @@ public class StorageConsumer implements EventHandler<StorageEvent> {
                 if (select.failed()) {
                     return;
                 }
-                List<String> uids = new ArrayList<>();
-                uids.add(select.result().getRows().get(0).getString("uid"));
-                storageEvent.getFuture().complete(uids);
+                storageEvent.getFuture().complete(select.result());
                 connection.close();
             });
         }

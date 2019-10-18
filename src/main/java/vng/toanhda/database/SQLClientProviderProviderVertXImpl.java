@@ -7,12 +7,12 @@ import io.vertx.ext.sql.SQLClient;
 
 import javax.sql.DataSource;
 
-public class SQLClientProviderProviderVertXIml extends ClientProvider implements SQLClientProviderVertX  {
+public class SQLClientProviderProviderVertXImpl extends ClientProvider implements SQLClientProviderVertX  {
 
     private final Vertx vertx;
     private SQLClient mySQLClient;
     DataSource dataSource;
-    public SQLClientProviderProviderVertXIml(Vertx vertx) {
+    public SQLClientProviderProviderVertXImpl(Vertx vertx) {
         this.vertx = vertx;
         this.dataSource = getDataSource();
     }
