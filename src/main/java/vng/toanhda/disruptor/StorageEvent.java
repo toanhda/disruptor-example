@@ -10,6 +10,10 @@ import lombok.Setter;
 import vng.toanhda.database.SQLClientProvider;
 import vng.toanhda.metrics.Tracker;
 
+import java.security.Provider;
+import java.sql.Connection;
+import java.util.List;
+
 
 @Setter
 @Getter
@@ -20,8 +24,9 @@ public class StorageEvent {
             return new StorageEvent();
         }
     };
-    Future<ResultSet> future;
+    Future<List<String>> future;
     Tracker tracker;
-    SQLConnection connection;
+    Connection connection;
+    SQLClientProvider provider;
 }
 

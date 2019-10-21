@@ -1,9 +1,10 @@
 package vng.toanhda.database;
 
 import io.vertx.core.Future;
-import io.vertx.ext.sql.ResultSet;
+
+import java.util.List;
 
 public interface Database {
-    Future<ResultSet> selectPing();
-    Future<ResultSet> selectPingWithDisruptor();
+    Future<List<String>> selectPing();
+    Future<List<String>> selectPingWithDisruptor();
 }

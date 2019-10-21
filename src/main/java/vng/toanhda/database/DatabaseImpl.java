@@ -2,11 +2,14 @@ package vng.toanhda.database;
 
 import com.lmax.disruptor.RingBuffer;
 import io.vertx.core.Future;
-import io.vertx.ext.sql.ResultSet;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sql.SQLConnection;
 import vng.toanhda.disruptor.DisruptorCreator;
 import vng.toanhda.disruptor.StorageEvent;
 import vng.toanhda.metrics.Tracker;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DatabaseImpl implements Database {
@@ -20,9 +23,9 @@ public class DatabaseImpl implements Database {
     }
 
 
-    public Future<ResultSet> selectPing() {
+    public Future<List<String>> selectPing() {
         Tracker.TrackerBuilder tracker = Tracker.builder().systemName("PingServiceCallDatabase").method("ping");
-        Future<ResultSet> response = Future.future();
+        Future<List<String>> response = Future.future();
         clientProviderVertX.getClientVertX().getConnection(ar -> {
             SQLConnection connection = ar.result();
             connection.query(SELECT_TEST, select -> {
@@ -31,7 +34,13 @@ public class DatabaseImpl implements Database {
                     response.fail(select.cause());
                     return;
                 }
-                response.complete(select.result());
+                List<String> uids = new ArrayList<>();
+
+                List<JsonObject> rows = select.result().getRows();
+                if (!rows.isEmpty()) {
+                    uids.add(rows.get(0).getString("uid"));
+                }
+                response.complete(uids);
                 connection.close();
             });
         });
@@ -39,19 +48,18 @@ public class DatabaseImpl implements Database {
     }
 
     @Override
-    public Future<ResultSet> selectPingWithDisruptor() {
+    public Future<List<String>> selectPingWithDisruptor() {
         Tracker tracker = Tracker.builder().systemName("PingServiceCallDatabase").method("pingWithDisruptor").build();
-        Future<ResultSet> future = Future.future();
-        clientProviderVertX.getClientVertX().getConnection(ar -> {
-            SQLConnection connection = ar.result();
-            RingBuffer<StorageEvent> ringBuffer = DisruptorCreator.getRingBuffer();
-            long sequenceId = ringBuffer.next();
-            StorageEvent storageEvent = ringBuffer.get(sequenceId);
-            storageEvent.setConnection(connection);
-            storageEvent.setFuture(future);
-            storageEvent.setTracker(tracker);
-            ringBuffer.publish(sequenceId);
-        });
+        Future<List<String>> future = Future.future();
+
+        RingBuffer<StorageEvent> ringBuffer = DisruptorCreator.getRingBuffer();
+        long sequenceId = ringBuffer.next();
+        StorageEvent storageEvent = ringBuffer.get(sequenceId);
+        storageEvent.setProvider(clientProvider);
+        storageEvent.setFuture(future);
+        storageEvent.setTracker(tracker);
+        ringBuffer.publish(sequenceId);
+
         return future;
     }
 }

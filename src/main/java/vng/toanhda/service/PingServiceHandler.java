@@ -4,7 +4,6 @@ import disruptor.protobuf.PingRequest;
 import disruptor.protobuf.PingResponse;
 import disruptor.protobuf.PingServiceGrpc;
 import io.vertx.core.Future;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sql.ResultSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +30,12 @@ public class PingServiceHandler extends PingServiceGrpc.PingServiceVertxImplBase
         logger.info("pingRequest = {}", JsonProtoUtils.print(pingRequest), System.currentTimeMillis());
         Tracker.TrackerBuilder tracker = Tracker.builder().systemName("PingService").method("");
 
-        Future<ResultSet> resultSetFuture = this.database.selectPing();
-        resultSetFuture.setHandler(res -> {
+        Future<List<String>> result = this.database.selectPing();
+        result.setHandler(res -> {
             if (res.failed()) {
                 response.fail(res.cause());
             } else {
-                completeRequest(res.result().getRows(), pingRequest.getTimestamp(), response, tracker);
+                completeRequest(res.result(), pingRequest.getTimestamp(), response, tracker);
             }
         });
     }
@@ -45,21 +44,21 @@ public class PingServiceHandler extends PingServiceGrpc.PingServiceVertxImplBase
     public void pingWithDisruptor(PingRequest pingRequest, Future<PingResponse> response) {
         logger.info("pingRequest = {}", JsonProtoUtils.print(pingRequest), System.currentTimeMillis());
         Tracker.TrackerBuilder tracker = Tracker.builder().systemName("PingService").method("pingWithDisruptor");
-        Future<ResultSet> resultSetFuture = this.database.selectPingWithDisruptor();
-        resultSetFuture.setHandler(res -> {
+        Future<List<String>> result = this.database.selectPingWithDisruptor();
+        result.setHandler(res -> {
             if (res.failed()) {
                 response.fail(res.cause());
             } else {
-                completeRequest(res.result().getRows(), pingRequest.getTimestamp(), response, tracker);
+                completeRequest(res.result(), pingRequest.getTimestamp(), response, tracker);
             }
         });
     }
 
     private void completeRequest(
-            List<JsonObject> rows, long timestamp, Future<PingResponse> response, Tracker.TrackerBuilder tracker) {
+            List<String> uids, long timestamp, Future<PingResponse> response, Tracker.TrackerBuilder tracker) {
         String uid = null;
-        if (!rows.isEmpty()) {
-            uid = rows.get(0).getString("uid");
+        if (!uids.isEmpty()) {
+            uid = uids.get(0);
         }
         PingResponse resPing = PingResponse.newBuilder()
                 .setTimestamp(timestamp)
