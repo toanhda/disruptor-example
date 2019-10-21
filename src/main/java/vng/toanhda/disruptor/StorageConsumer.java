@@ -15,9 +15,9 @@ public class StorageConsumer implements EventHandler<StorageEvent> {
     @Override
     public void onEvent(StorageEvent storageEvent, long sequence, boolean endOfBatch) throws Exception {
         Connection connection = storageEvent.getProvider().getConnection();
-
         Statement stmt = connection.createStatement();
         ResultSet rs = stmt.executeQuery(SELECT_TEST);
+        storageEvent.getTracker().record();
         List<String> uids = new ArrayList<>();
         while(rs.next()){
             uids.add(rs.getString("uid"));

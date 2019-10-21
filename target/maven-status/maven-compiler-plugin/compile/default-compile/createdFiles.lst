@@ -23,8 +23,8 @@ disruptor/protobuf/PingServiceGrpc$PingServiceImplBase.class
 vng/toanhda/metrics/Tracker.class
 disruptor/protobuf/PingServiceGrpc$MethodHandlers.class
 vng/toanhda/vertx/VertxConfig.class
+vng/toanhda/database/DatabaseImpl.class
 vng/toanhda/disruptor/DisruptorConfig.class
-vng/toanhda/database/DatabaseIml.class
 disruptor/protobuf/PingServiceGrpc$VertxMethodHandlers.class
 vng/toanhda/database/Database.class
 vng/toanhda/vertx/VertxCommon.class
@@ -36,13 +36,13 @@ disruptor/protobuf/PingServiceGrpc$PingServiceFutureStub.class
 disruptor/protobuf/PingServiceGrpc$PingServiceVertxImplBase.class
 disruptor/protobuf/Ping$1.class
 disruptor/protobuf/PingResponse$1.class
-vng/toanhda/database/SQLClientProviderProviderVertXIml.class
+vng/toanhda/database/SQLClientProviderProviderImpl.class
 vng/toanhda/service/PingServiceHandler.class
 disruptor/protobuf/Ping.class
 disruptor/protobuf/PingResponseOrBuilder.class
 disruptor/protobuf/PingRequest$1.class
 disruptor/protobuf/PingRequestOrBuilder.class
 disruptor/protobuf/PingServiceGrpc$PingServiceBaseDescriptorSupplier.class
-vng/toanhda/database/SQLClientProviderProviderIml.class
 vng/toanhda/utils/FileConfigLoader.class
 vng/toanhda/grpc/GrpcServer.class
+vng/toanhda/database/SQLClientProviderProviderVertXImpl.class
