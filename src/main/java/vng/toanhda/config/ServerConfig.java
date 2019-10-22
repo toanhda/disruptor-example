@@ -30,9 +30,6 @@ public class ServerConfig {
     logger.info("> grpcConfig={}", JsonProtoUtils.printGson(grpcConfig));
     logger.info("> disruptorConfig={}", JsonProtoUtils.printGson(disruptorConfig));
 
-    System.out.println("> vertxConfig={}"+ JsonProtoUtils.printGson(vertxConfig));
-    System.out.println("> grpcConfig={}"+ JsonProtoUtils.printGson(grpcConfig));
-    System.out.println("> disruptorConfig={}"+ JsonProtoUtils.printGson(disruptorConfig));
 
   }
 }

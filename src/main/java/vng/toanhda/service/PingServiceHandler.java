@@ -28,7 +28,7 @@ public class PingServiceHandler extends PingServiceGrpc.PingServiceVertxImplBase
     @Override
     public void ping(PingRequest pingRequest, Future<PingResponse> response) {
         logger.info("pingRequest = {}", JsonProtoUtils.print(pingRequest), System.currentTimeMillis());
-        Tracker.TrackerBuilder tracker = Tracker.builder().systemName("PingService").method("");
+        Tracker tracker = Tracker.builder().systemName("PingService").method("ping").build();
 
         Future<List<String>> result = this.database.selectPing();
         result.setHandler(res -> {
@@ -43,7 +43,7 @@ public class PingServiceHandler extends PingServiceGrpc.PingServiceVertxImplBase
     @Override
     public void pingWithDisruptor(PingRequest pingRequest, Future<PingResponse> response) {
         logger.info("pingRequest = {}", JsonProtoUtils.print(pingRequest), System.currentTimeMillis());
-        Tracker.TrackerBuilder tracker = Tracker.builder().systemName("PingService").method("pingWithDisruptor");
+        Tracker tracker = Tracker.builder().systemName("PingService").method("pingWithDisruptor").build();
         Future<List<String>> result = this.database.selectPingWithDisruptor();
         result.setHandler(res -> {
             if (res.failed()) {
@@ -55,7 +55,7 @@ public class PingServiceHandler extends PingServiceGrpc.PingServiceVertxImplBase
     }
 
     private void completeRequest(
-            List<String> uids, long timestamp, Future<PingResponse> response, Tracker.TrackerBuilder tracker) {
+            List<String> uids, long timestamp, Future<PingResponse> response, Tracker tracker) {
         String uid = null;
         if (!uids.isEmpty()) {
             uid = uids.get(0);
@@ -65,7 +65,7 @@ public class PingServiceHandler extends PingServiceGrpc.PingServiceVertxImplBase
                 .setSystemName(uid)
                 .build();
         response.complete(resPing);
-        tracker.build().record();
+        tracker.record();
     }
 
 
