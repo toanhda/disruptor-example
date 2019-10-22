@@ -15,9 +15,9 @@ public class DisruptorCreator {
     private static Disruptor disruptor;
     private static RingBuffer ringBuffer;
 
-    public static <T> Disruptor getInstance(String disruptorName, EventFactory<StorageEvent> factory, int bufferSize, StorageConsumer handlers) {
+    public static <T> Disruptor getInstance(String disruptorName, EventFactory<StorageEvent> factory, int bufferSize) {
         if (disruptor == null) {
-            disruptor = newInstance(disruptorName, factory, bufferSize, handlers);
+            disruptor = newInstance(disruptorName, factory, bufferSize);
         }
         return disruptor;
     }
@@ -26,7 +26,7 @@ public class DisruptorCreator {
         return ringBuffer;
     }
 
-    public static <T> Disruptor newInstance(String disruptorName, EventFactory<StorageEvent> factory, int bufferSize, StorageConsumer handlers) {
+    public static <T> Disruptor newInstance(String disruptorName, EventFactory<StorageEvent> factory, int bufferSize) {
         Disruptor disruptor = new Disruptor(factory,
                 bufferSize,
                 DaemonThreadFactory.INSTANCE,
