@@ -8,16 +8,14 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
 
-import java.util.ArrayList;
-
 public class DisruptorCreator {
     public static final String DISRUPTOR_NAME_GET = "Get";
     private static Disruptor disruptor;
     private static RingBuffer ringBuffer;
 
-    public static <T> Disruptor getInstance(String disruptorName, EventFactory<StorageEvent> factory, int bufferSize) {
+    public static <T> Disruptor getInstance(String disruptorName, EventFactory<StorageEvent> factory, DisruptorConfig disruptorConfig) {
         if (disruptor == null) {
-            disruptor = newInstance(disruptorName, factory, bufferSize);
+            disruptor = newInstance(disruptorName, factory, disruptorConfig);
         }
         return disruptor;
     }
@@ -26,34 +24,29 @@ public class DisruptorCreator {
         return ringBuffer;
     }
 
-    public static <T> Disruptor newInstance(String disruptorName, EventFactory<StorageEvent> factory, int bufferSize) {
+    public static <T> Disruptor newInstance(String disruptorName, EventFactory<StorageEvent> factory, DisruptorConfig disruptorConfig) {
+        ProducerType producerType = disruptorConfig.getProducerType().equals("MULTI")
+                ? ProducerType.MULTI : ProducerType.SINGLE;
+
         Disruptor disruptor = new Disruptor(factory,
-                bufferSize,
+                disruptorConfig.getBufferSize(),
                 DaemonThreadFactory.INSTANCE,
-                ProducerType.SINGLE,
+                producerType,
                 new BusySpinWaitStrategy());
 
-//        disruptor.handleEventsWith(handlers);
-
-        disruptor.handleEventsWithWorkerPool(new StorageConsumer(),
-                new StorageConsumer(),
-                new StorageConsumer(),
-                new StorageConsumer(),
-                new StorageConsumer(),
-                new StorageConsumer(),
-                new StorageConsumer(),
-                new StorageConsumer(),
-                new StorageConsumer(),
-                new StorageConsumer(),
-                new StorageConsumer(),
-                new StorageConsumer(),
-                new StorageConsumer(),
-                new StorageConsumer(),
-                new StorageConsumer(),
-                new StorageConsumer());
+        disruptor.handleEventsWithWorkerPool(getWorkersPool(disruptorConfig.getNumWorkers()));
         ringBuffer = disruptor.start();
 
         return disruptor;
     }
+
+    static WorkHandler<StorageEvent>[] getWorkersPool(int numWorkers) {
+        WorkHandler<StorageEvent>[] workHandlers = new WorkHandler[numWorkers];
+        for (int i = 0; i < numWorkers; i++) {
+            workHandlers[i] = new StorageConsumer();
+        }
+        return workHandlers;
+    }
+
 }
 

@@ -27,9 +27,7 @@ public class PingServiceHandler extends PingServiceGrpc.PingServiceVertxImplBase
 
     @Override
     public void ping(PingRequest pingRequest, Future<PingResponse> response) {
-        logger.info("pingRequest = {}", JsonProtoUtils.print(pingRequest), System.currentTimeMillis());
         Tracker tracker = Tracker.builder().systemName("PingService").method("ping").build();
-
         Future<List<String>> result = this.database.selectPing();
         result.setHandler(res -> {
             if (res.failed()) {
@@ -42,7 +40,6 @@ public class PingServiceHandler extends PingServiceGrpc.PingServiceVertxImplBase
 
     @Override
     public void pingWithDisruptor(PingRequest pingRequest, Future<PingResponse> response) {
-        logger.info("pingRequest = {}", JsonProtoUtils.print(pingRequest), System.currentTimeMillis());
         Tracker tracker = Tracker.builder().systemName("PingService").method("pingWithDisruptor").build();
         Future<List<String>> result = this.database.selectPingWithDisruptor();
         result.setHandler(res -> {

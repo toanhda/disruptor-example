@@ -1,13 +1,14 @@
 package vng.toanhda;
 
+import com.lmax.disruptor.dsl.ProducerType;
 import io.vertx.core.Vertx;
 import vng.toanhda.config.ServerConfig;
 import vng.toanhda.database.SQLClientProvider;
 import vng.toanhda.database.SQLClientProviderProviderImpl;
 import vng.toanhda.database.SQLClientProviderProviderVertXImpl;
 import vng.toanhda.database.SQLClientProviderVertX;
+import vng.toanhda.disruptor.DisruptorConfig;
 import vng.toanhda.disruptor.DisruptorCreator;
-import vng.toanhda.disruptor.StorageConsumer;
 import vng.toanhda.disruptor.StorageEvent;
 import vng.toanhda.grpc.GrpcServer;
 import vng.toanhda.service.PingServiceHandler;
@@ -16,8 +17,6 @@ import vng.toanhda.vertx.VertxCommon;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class App {
     public static void main(String[] args) throws IOException, SQLException {
@@ -27,7 +26,7 @@ public class App {
 
         // Start disruptor
         DisruptorCreator.getInstance(
-                DisruptorCreator.DISRUPTOR_NAME_GET, StorageEvent.EVENT_FACTORY, serverConfig.getDisruptorConfig().getBufferSize());
+                DisruptorCreator.DISRUPTOR_NAME_GET, StorageEvent.EVENT_FACTORY, serverConfig.getDisruptorConfig());
 
         // Initialize service
         Vertx vertx = VertxCommon.getVertxInstance(serverConfig.getVertxConfig());

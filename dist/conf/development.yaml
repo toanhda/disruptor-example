@@ -8,3 +8,5 @@ grpcConfig:
 
 disruptorConfig:
   bufferSize: 1024
+  numWorkers: 32
+  producerType: "MULTI"

@@ -8,4 +8,6 @@ import lombok.Setter;
 @Getter
 public class DisruptorConfig {
   private int bufferSize = -1;
+  private int numWorkers = -1;
+  private String producerType = "";
 }
