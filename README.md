@@ -14,11 +14,19 @@ Project này dùng để so sánh perfomance giữa việc sử dụng `vertx-jd
 
 LMAX-Disruptor là một bộ thư viện giúp cho việc phát triển các ứng dụng với độ tải lớn (high-performance) cho phép xử lý đồng thời (concurrency) một số lượng rất lớn message mà không cần Lock (lock-free). Nếu bạn làm việc với Java thì thực tế đây là bộ thư viện về Concurrency tốt nhất và nhanh nhất hiện nay.
 
+## Tại sao không phải là queue?
+
+Việc sử dụng queue có thể sảy ra tranh chấp tại 2 điểm đầu và cuối(head, tail). Queue thường luôn gần đầy hoặc trống. Việc đó cho thấy sự khác biệt về tốc độ giữa consumer và producer. Chúng ít khi hoạt động gần như là cân bằng vềề hiệu suất.
+
+Để tránh `write contention`, queueeue thường sử dụng locks, điều này làm giảm hiệu suất và trong ngữ cảnh kernel có thể làm mấy cache.
+
+Nếu hai thread riêng biệt ghi vào hai giá trị khác nhau, mỗi thread có thể sẽ sẽ ảnh hưởng tới dữ liệu bên thread khác thực hiên. Đó là sự tranh chấp giữa hai thread mặc dù chúng đang ghi trên hai biến khác nhau. Điều này được gọi là `false sharing,`, bởi vì mỗi lần truy cập và để lấy head thì cũng phải lấy tail và ngược lại.
+
 ## Disruptor hoạt động như thế nào?
 
 <img src="./public/images/RingBuffer.jpg"/>
 
-Disruptor có một array dựa trên circular data structure (ring buffer). Nó được filled các object trước khi thực hiện. Produces và consumers thực hiện writing hoặc reading mà không bị locking hay tranh chấp.
+Ring buffer trong disruptor được filled các object trước khi thực hiện. Produces và consumers thực hiện writing hoặc reading mà không bị locking hay tranh chấp.
 
 Trong Disruptor, tất cả event được published cho tât cả consumers(multi cast), để parallel consumption thông qua các downstream queues riêng biệt.
 
