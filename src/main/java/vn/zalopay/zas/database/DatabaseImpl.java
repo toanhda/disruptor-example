@@ -15,7 +15,7 @@ public class DatabaseImpl implements Database {
   private SQLClientProviderVertX clientProviderVertX;
   private SQLClientProvider clientProvider;
   private String SELECT_TEST =
-      "SELECT * FROM zas_dev.account where  account_no ='9223738833213728270'";
+      "SELECT * FROM zas_qc.account where  account_no ='9223379939013999965'";
 
   public DatabaseImpl(
       SQLClientProviderVertX clientProviderVertX, SQLClientProvider clientProvider) {

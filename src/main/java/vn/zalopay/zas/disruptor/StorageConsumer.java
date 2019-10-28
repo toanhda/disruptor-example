@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StorageConsumer implements WorkHandler<StorageEvent> {
-  String SELECT_TEST = "SELECT * FROM zas_dev.account where  account_no ='9223738833213728270'";
+  String SELECT_TEST = "SELECT * FROM zas_qc.account where  account_no ='9223379939013999965'";
 
   @Override
   public void onEvent(StorageEvent storageEvent) throws Exception {
