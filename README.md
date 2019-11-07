@@ -265,7 +265,7 @@ MULTI, SINGLE
 - Sử dụng Disruptor
   
 |Disruptor worker |Ring size|Producer type|WaitStrategy|Throughput|Latency(p99)|
-|--|--| --|--|--|--|--|
+|--|--|--|--|--|--|--|
 |256|65536|MULTI|BusySpinWaitStrategy|12421|0.020187|
 |128|65536|MULTI|BusySpinWaitStrategy|16055|0.018122|
 |64|65536|MULTI|BusySpinWaitStrategy|32637|0.007099|
