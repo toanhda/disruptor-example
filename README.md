@@ -2,12 +2,6 @@
 
 <img src="./public/images/disruptor.png" />
 
-## Vấn đề
-
-Hiên  tại ZAS đang trong quá trình xây dựng và phát triển thành một hệ thống `high performance` nhất có thể. `Disruptor` nổi lên như là một ứng viên có thể giúp ZAS cải thiện được latency trong việc sử dụng queue để pass dữ liệu qua các stage của hệ thống. 
-
-Project này dùng để so sánh perfomance giữa việc sử dụng `vertx-jdbc-client` với `Disruptor` + `java-jdbc`.
-
 ## Disruptor là gì?
 
 [LMAX](https://www.lmax.com/) đặt mục tiêu trở thành nền tảng giao dịch nhanh nhất thế giới, vì vậy họ đã thử nghiệm để giảm latency thấp nhất. Performance testing cho thấy việc sử dụng queue để pass dữ liệu giữa các stage của hệ thống có độ trễ, vì vậy họ tập trung vào việc tối ưu hoá phần này. Và sau thời gian nghiên cứu và thử nghiệm, họ cho ra sản phẩm là `Disruptor`.
