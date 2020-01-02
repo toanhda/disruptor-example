@@ -2,12 +2,14 @@ package toanhda.disruptor.disruptor;
 
 import com.lmax.disruptor.EventFactory;
 import io.vertx.core.Future;
+import io.vertx.core.Vertx;
 import lombok.Getter;
 import lombok.Setter;
 import toanhda.disruptor.database.SQLClientProvider;
 import toanhda.disruptor.metrics.Tracker;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 @Setter
 @Getter
@@ -19,7 +21,8 @@ public class StorageEvent {
           return new StorageEvent();
         }
       };
-  Future<List<String>> future;
+  Future<Void> future = Future.future();
   Tracker tracker;
-  SQLClientProvider provider;
+  Vertx vertx;
+//  SQLClientProvider provider;
 }

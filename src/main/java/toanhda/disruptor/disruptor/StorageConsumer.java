@@ -13,17 +13,7 @@ public class StorageConsumer implements WorkHandler<StorageEvent> {
 
   @Override
   public void onEvent(StorageEvent storageEvent) throws Exception {
-    Connection connection = storageEvent.getProvider().getConnection();
-    Statement stmt = connection.createStatement();
-    ResultSet rs = stmt.executeQuery(SELECT_TEST);
-    storageEvent.getTracker().record();
-    List<String> uids = new ArrayList<>();
-    while (rs.next()) {
-      uids.add(rs.getString("uid"));
-    }
-    storageEvent.getFuture().complete(uids);
-    rs.close();
-    stmt.close();
-    connection.close();
+    Thread.sleep(40);
+    storageEvent.getFuture().complete();
   }
 }

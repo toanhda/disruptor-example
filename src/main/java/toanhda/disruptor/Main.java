@@ -15,8 +15,9 @@ import toanhda.disruptor.utils.FileConfigLoader;
 
 import java.io.IOException;
 import java.sql.SQLException;
-
 public class Main {
+
+
   public static void main(String[] args) throws IOException, SQLException {
 
     ServerConfig serverConfig = FileConfigLoader.load(ServerConfig.class);
@@ -27,10 +28,10 @@ public class Main {
 
     // Initialize service
     Vertx vertx = VertxCommon.getVertxInstance(serverConfig.getVertxConfig());
-    SQLClientProviderVertX clientProviderVertX = new SQLClientProviderProviderVertXImpl(vertx);
-    clientProviderVertX.initialize();
-    SQLClientProvider clientProvider = new SQLClientProviderProviderImpl();
-    PingServiceHandler pingService = new PingServiceHandler(clientProviderVertX, clientProvider);
+//    SQLClientProviderVertX clientProviderVertX = new SQLClientProviderProviderVertXImpl(vertx);
+//    clientProviderVertX.initialize();
+//    SQLClientProvider clientProvider = new SQLClientProviderProviderImpl();
+    PingServiceHandler pingService = new PingServiceHandler(vertx);
 
     // Start gRPC
     GrpcServer grpcServer = new GrpcServer(vertx, pingService);

@@ -34,7 +34,7 @@ public class DisruptorCreator {
             disruptorConfig.getBufferSize(),
             DaemonThreadFactory.INSTANCE,
             producerType,
-            new BusySpinWaitStrategy());
+            new BlockingWaitStrategy());
 
     disruptor.handleEventsWithWorkerPool(getWorkersPool(disruptorConfig.getNumWorkers()));
     ringBuffer = disruptor.start();
