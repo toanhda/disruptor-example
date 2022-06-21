@@ -25,7 +25,7 @@
     <disruptor.version>3.4.2</disruptor.version>
     <lombok.version>1.16.20</lombok.version>
     <protobufjavaformat.version>1.4</protobufjavaformat.version>
-    <mysql.version>6.0.6</mysql.version>
+    <mysql.version>8.0.28</mysql.version>
     <hikariCP.version>3.3.1</hikariCP.version>
     <snakeyaml.version>1.21</snakeyaml.version>
     <micrometer.version>1.1.4</micrometer.version>
