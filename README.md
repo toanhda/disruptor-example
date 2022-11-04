@@ -274,6 +274,7 @@ MULTI, SINGLE
 |64|65536|SINGLE|BusySpinWaitStrategy |230|0.010551|
 |64|65536|MULTI|BlockingWaitStrategy |33355|0.006878|
 
+
 Kết quả cho thấy:
 - Number Worker:  Khi số worker trong disruptor bằng số connection pool thì kết quả đạt ngưỡng cao nhất.
 -  Producer type: MULTI producer performance sẽ cao hơn với SINGLE producer
